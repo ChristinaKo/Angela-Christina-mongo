@@ -11,6 +11,9 @@ def index():
 def about():
     return render_template("about.html")
 
+@app.route("/login", methods=["POST","GET"])
+def login():
+    return render_template("login.html")
 
 if __name__ == '__main__':
     app.debug = True
