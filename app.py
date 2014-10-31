@@ -15,6 +15,14 @@ def about():
 def login():
     return render_template("login.html")
 
+@app.route("/loggedin/<username>")
+def logged_in(username):
+    return render_template("loggedin.html")
+    
+@app.route("/register", methods=["POST","GET"])
+def register():
+    return render_template("register.html")
+
 if __name__ == '__main__':
     app.debug = True
     app.run()

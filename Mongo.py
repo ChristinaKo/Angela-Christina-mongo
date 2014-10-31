@@ -24,11 +24,19 @@ print db.collection_names() #currently empty
 #-->Real Name
 #-->color of page?
 
-
 ###FOR CHECKING (USERNAME AND PASSWORD):
 #check if username is in database/collection
 #if yes, then check if corresponding pwd matches
 #if no, then return error message, angry face, redirect to login page
+
+##USER EXCLUSIVE PAGES
+#user information page
+#
+
+##NON-USER AVAILABLE PAGES
+#about page
+#login page
+#register page
 
 #use boolean to pass through jinja/html to see whether or not to display error message (when username is not available/DNE)
 
