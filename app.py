@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,redirect, session
 
 app = Flask(__name__)
 
@@ -22,7 +22,23 @@ def logged_in(username):
     
 @app.route("/register", methods=["POST","GET"])
 def register():
-    return render_template("register.html")
+    #use a boolean later/redirect to home page?
+    if request.method == "POST":
+        usr = request.form['username']
+        passw = request.form['passwd']
+        repassw = request.form['repasswd']
+        firstname = request.form['fname']
+        lastname = request.form['lname']
+        if passw == repassw and usr!='' and passw!='' and firstname!='' and lastname!='':
+            retVals = ' %s , %s, %s, %s , %s ' % (usr, passw, repassw, firstname, lastname)
+            MONGO = "{ 'uname':%s } " % (usr)
+            return redirect("/") 
+        #print retVals
+        else: #aka passwd !=repassw
+            reg_error = True
+            #set boolean to true --> will trigger error banner which we will pass through render_template
+            return render_template("register.html")
+    return render_template("register.html")#redirect to login, with banner that says "THANK YOU FOR REGISTERING!"
 
 if __name__ == '__main__':
     app.debug = True

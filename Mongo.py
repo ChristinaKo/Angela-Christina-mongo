@@ -6,12 +6,19 @@ from pymongo import MongoClient
 
 client = MongoClient()
 
-db = client['data']
+db = client['data']#database called data
 users = db['names']#collection of users
-print db.collection_names() #currently empty
-user1 = { 'name': "lame"}
+#print db.collection_names() #currently empty
+user1 = { 'name': "lame", 'id':'12323'}
+user2 = { 'name': "lame", 'id':'56567'}
 users.insert(user1)
-print ("names" in db.collection_names())
+users.insert(user2)
+
+for post in users.find({'name':'lame'}):
+    print post
+    
+db.drop_collection('names') #drops collection each time --> this should not be necessary in the future but...
+
 
 
 ###FOR REGISTERING:
