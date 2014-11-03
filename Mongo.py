@@ -1,15 +1,17 @@
 import random
-from pymongo import Connection
+from pymongo import MongoClient
+#after looking at the API, it seems like using
+#MongoClient is better than using Connection,
+#which is depreciated
 
-conn = Connection()
+client = MongoClient()
 
-#db.conn.admin
-#db.authenticate('user','password')
-
-db = conn['ACdata']
-
+db = client['data']
+name = db['names']#collections
 print db.collection_names() #currently empty
-
+post = { 'name': "Lame"}
+name.insert(post)
+print db.collection_names()
 
 ###FOR REGISTERING:
 #use input from the HTML for name and password
@@ -20,7 +22,7 @@ print db.collection_names() #currently empty
 ##REGISTERING INFORMATION NEEDED:
 #-->username
 #-->password/confirm password
-#-->birthday (via dropbox)
+#-->birthday (via dropdown)
 #-->Real Name
 #-->color of page?
 
