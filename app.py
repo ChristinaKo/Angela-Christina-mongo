@@ -11,9 +11,10 @@ def index():
 def about():
     return render_template("about.html")
 
+#same as index page
 @app.route("/login", methods=["POST","GET"])
 def login():
-    return render_template("login.html")
+    return render_template("index.html")
 
 @app.route("/loggedin/<username>")
 def logged_in(username):

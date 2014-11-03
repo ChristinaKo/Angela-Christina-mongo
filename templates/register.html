@@ -32,24 +32,38 @@
 	<li><li>
         <li class="pure-menu-selected">MONGO DEMO</li>
         <li><a href="/about">About</a></li>
-	<li class="pure-menu-selected"><a href="/login">Login</a></li>
+	<li><a href="/login">Login</a></li>	
+	<li class="pure-menu-selected"><a href="/register">Register</a></li>
       </ul>
     </div>
     <br>
+    <div class="centered">
+    Hello, new users! Please fill out this form for your new account:<br>
+    </div>
+    <br><br>
     <form class="pure-form" method="POST">
       Username: 
       <br>  
-      <input class="form-stuff" type="text" size="30" placeholder="Username" name="user"></input>
+      <input class="form-stufftwo" type="text" size="30" placeholder="Username" name="username"></input>
       <br><br>
       Password:
       <br>
-      <input class-"form-stuff" type="text" size="30" placeholder="Password" name="passwd"></input>
-      <br><br><button class="pure-button" name="submit" value="yes">Submit</button>
+      <input class="form-stufftwo" type="text" size="30" placeholder="Password" name="passwd"></input>
+      <br><br>
+      Re-type Password:
+      <br>
+      <input class="form-stufftwo" type="text" size="30" placeholder="Retype Password" name="repasswd"></input>
+      <br><br>
+      First Name:
+      <br>
+      <input class="form-stufftwo" type="text" size="30" placeholder="First Name" name="fname"></input>
+      <br><br>
+      Last Name:<br>
+      <input class="form-stufftwo" type="text" size="30" placeholder="Last Name" name="lname"></input>
+      <br><br>
+      <button class="pure-button" name="submit" value="yes">Submit</button>
     </form>
     <br>
-    <div class ="centered">
-    Don't have an account? Register <a href="/register">HERE!</a>
-    </div>
     <br>
   </div>
   <div class="pure-u-1-24"></div>
