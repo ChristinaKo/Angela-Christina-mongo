@@ -7,11 +7,12 @@ from pymongo import MongoClient
 client = MongoClient()
 
 db = client['data']
-name = db['names']#collections
+users = db['names']#collection of users
 print db.collection_names() #currently empty
-post = { 'name': "Lame"}
-name.insert(post)
-print db.collection_names()
+user1 = { 'name': "lame"}
+users.insert(user1)
+print ("names" in db.collection_names())
+
 
 ###FOR REGISTERING:
 #use input from the HTML for name and password
