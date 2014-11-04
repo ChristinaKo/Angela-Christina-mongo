@@ -1,12 +1,15 @@
-from flask import Flask, render_template, request,redirect, session
+from flask import Flask, render_template, request,redirect, session, url_for
 
 app = Flask(__name__)
 
+
 @app.route("/", methods=["POST","GET"])
 def index():
-    return render_template("index.html")
-
-
+    try:
+        reged = registered
+    except NameError:
+        reged=False
+    return render_template("index.html",reged=reged)
 @app.route("/about", methods=["POST","GET"])
 def about():
     return render_template("about.html")
@@ -30,6 +33,7 @@ def register():
         firstname = request.form['fname']
         lastname = request.form['lname']
         if passw == repassw and usr!='' and passw!='' and firstname!='' and lastname!='':
+            registered=True
             retVals = ' %s , %s, %s, %s , %s ' % (usr, passw, repassw, firstname, lastname)
             MONGO = "{ 'uname':%s } " % (usr)
             return redirect("/") 
