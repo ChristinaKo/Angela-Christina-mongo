@@ -40,11 +40,11 @@
     <div class="centered">
       <!-- jinja goes here / if statement for below/error -->
       
-      {% if reg_error == True: %}
+      {% if reg_error %}
       Registrations has failed. Please try again. <br>
-      {%else%}
+      {% else %}
       Hello, new users! Please fill out this form for your new account:<br>
-      
+      {%endif%}
     </div>
     <br><br>
     <form class="pure-form" method="POST">
