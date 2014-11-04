@@ -37,7 +37,7 @@ def register():
         else: #aka passwd !=repassw
             reg_error = True
             #set boolean to true --> will trigger error banner which we will pass through render_template
-            return render_template("register.html")
+            return render_template("register.html", reg_error= reg_error)
     return render_template("register.html")#redirect to login, with banner that says "THANK YOU FOR REGISTERING!"
 
 if __name__ == '__main__':
