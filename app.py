@@ -1,12 +1,31 @@
 from flask import Flask, render_template, request,redirect, session, url_for,session,escape,request
 import MongoWork
 app = Flask(__name__)
+app.secret_key = 'Really secret but not really' #just for session usage
 
 
 @app.route("/", methods=["POST","GET"])
 def index():
-    return render_template("index.html")
+    if request.method == 'POST':
+        userinput = request.form['user']
+        pwdinput = request.form['passwd']
+        #print MongoWork.check_user_in_db(userinput)
+        if MongoWork.check_user_in_db(userinput) != None:
+            if MongoWork.find_pword(userinput) == pwdinput:
+                 #session['username'] = request.form['user']
+                 return redirect(url_for('about'))
+            else:
+                error = True
+                return render_template("index.html" ,error=error)
+        else:
+            #print "not in users"
+            notreg = True
+            return render_template("index.html", notreg = notreg)
+    else:#request.method == "GET"
+        error = False
+        return render_template("index.html")
 
+#can be viewed without logging in
 @app.route("/about", methods=["POST","GET"])
 def about():
     return render_template("about.html")
@@ -36,17 +55,26 @@ def register():
                             'lastname':lastname } 
             #print mongo_input
             #print MongoWork.check_user_in_db(usr)
-            if MongoWork.check_user_in_db(usr):#may change to flash
+            if MongoWork.check_user_in_db(usr):
                 user_taken=True
                 return render_template("register.html",user_taken=user_taken, usr=usr)
-            else:
+            else:####SUCCESS!
                 MongoWork.new_user(mongo_input) #put user into our mongodb
-                return redirect(url_for("index",registered=True)) 
-        else: #aka passwd !=repassw
-            reg_error = True
-            #set boolean to true --> will trigger error banner which we will pass through render_template
-            return render_template("register.html", reg_error= reg_error)
-    return render_template("register.html")#redirect to login, with banner that says "THANK YOU FOR REGISTERING!"
+                registered = True
+                return redirect(url_for("index",registered=registered)) 
+        else: #aka passwd !=repassw OR not all filled out
+            if passw != repassw:#pwd and re-type pwd fields do not match
+                reg_error = True
+                return render_template("register.html", reg_error=reg_error)
+            else:#missing field error
+                empty=True
+                return render_template("register.html", empty=empty)
+    else:#GET method
+        return render_template("register.html")
+
+
+
+
 
 if __name__ == '__main__':
     app.debug = True

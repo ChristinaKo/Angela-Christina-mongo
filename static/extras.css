@@ -17,6 +17,13 @@ specific font stacks to ensure the greatest OS/browser compatibility.
     font-size: 45px;
 }
 
+.error {
+    color: red;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
 .centered {
     text-align: center;
     font-size: 20px;

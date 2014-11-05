@@ -14,6 +14,12 @@ users = db['names']#collection of users
 def check_user_in_db(usr):
     return users.find_one({'uname':usr})
 
+#finds the password of a given user, so we can check for validation
+def find_pword(usr):
+    #okay to use find_one since usernames are unique
+    res = users.find_one({'uname':usr}, {'_id':False})
+    return res['password']
+
 #creating a new user
 def new_user(dictinput):#MUST CHECK IF USER IN DB
     users.insert(dictinput)

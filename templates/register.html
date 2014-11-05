@@ -38,12 +38,18 @@
     </div>
     <br>
     <div class="centered">
-      <!-- jinja goes here / if statement for below/error -->
-      
-      {% if reg_error %}
+      {% if empty %}
+      <div class="error"> 
+      Missing fields! Please try again. <br>
+      </div> 
+      {% elif reg_error %}
+      <div class="error"> 
       Passwords did not match! Please try again. <br>
+      </div>
       {% elif user_taken %}
+      <div class="error"> 
       Sorry! Username "{{usr}}" is already taken. Please try again. <br>
+      </div>
       {% else %}
       Hello, new users! Please fill out this form for your new account:<br>
       {%endif%}
