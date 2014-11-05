@@ -32,11 +32,25 @@
 	<li><li>
         <li class="pure-menu-selected">MONGO DEMO</li>
         <li><a href="/about">About</a></li>
+	<li><a href="/dashboard">Home</a></li>
 	<li class="pure-menu-selected"><a href="/">Login</a></li>
 	<li><a href="/register">Register</a></li>
-
+	<li><a href="/loggedin/">User Information</a></li>
       </ul>
     </div>
+    <br>
+    
+    {% block body %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class=flashes>
+      {% for message in messages %}
+      {{ message }}
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% endblock %}
     <br>
     <div class="error">
       {% if error %}

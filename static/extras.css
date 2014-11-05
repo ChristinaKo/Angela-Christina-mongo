@@ -16,6 +16,12 @@ specific font stacks to ensure the greatest OS/browser compatibility.
     text-align: center;
     font-size: 45px;
 }
+.flashes {
+    color: red;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
 
 .error {
     color: red;

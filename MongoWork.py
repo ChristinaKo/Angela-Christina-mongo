@@ -20,34 +20,20 @@ def find_pword(usr):
     res = users.find_one({'uname':usr}, {'_id':False})
     return res['password']
 
+def find_usrinfo(usr):
+    #okay to use find_one since usernames are unique
+    res = users.find_one({'uname':usr}, {'_id':False})
+    return res
+
 #creating a new user
 def new_user(dictinput):#MUST CHECK IF USER IN DB
     users.insert(dictinput)
-    for user in users.find():
-        print user
+    #for user in users.find():
+        #print user
 
 def drop_users():
     db.drop_collection('names') #drops collection each time --> this should not be necessary in the future but...
 
-
-##REGISTERING INFORMATION NEEDED:
-#-->username
-#-->password/confirm password
-#-->birthday (via dropdown)
-#-->Real Name
-#-->color of page?
-
-###FOR CHECKING (USERNAME AND PASSWORD):
-#check if username is in database/collection
-#if yes, then check if corresponding pwd matches
-#if no, then return error message, angry face, redirect to login page
-
-##USER EXCLUSIVE PAGES
-#user information page
-#
-
-##NON-USER AVAILABLE PAGES
-#about page
-#login page
-#register page
+def update_password(usr,newpwd):
+    users.update({'uname':usr},{'$set':{'password':newpwd}}, upsert=False, multi=False)
 

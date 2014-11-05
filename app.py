@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request,redirect, session, url_for,session,escape,request
+from flask import Flask, render_template, request,redirect, session, url_for,session,escape,request, flash
 import MongoWork
 app = Flask(__name__)
 app.secret_key = 'Really secret but not really' #just for session usage
@@ -6,6 +6,7 @@ app.secret_key = 'Really secret but not really' #just for session usage
 
 @app.route("/", methods=["POST","GET"])
 def index():
+    error = None
     if request.method == 'POST':
         userinput = request.form['user']
         pwdinput = request.form['passwd']
@@ -13,7 +14,11 @@ def index():
         if MongoWork.check_user_in_db(userinput) != None:
             if MongoWork.find_pword(userinput) == pwdinput: ##SUCCESSFULLY LOGGED IN
                 session['username'] = userinput
-                return redirect(url_for('dashboard',username=userinput))
+                redirect_necessary = request.args.get('redirect_user')
+                if redirect_necessary:
+                    return redirect(url_for("user"))
+                else:
+                    return redirect(url_for('dashboard',username=userinput))
             else:#incorrect password error
                 error = True
                 return render_template("index.html" ,error=error)
@@ -22,27 +27,67 @@ def index():
             notreg = True
             return render_template("index.html", notreg = notreg)
     else:#request.method == "GET"
-        error = False
+        error = None
         return render_template("index.html")
 
 #can be viewed without logging in
 @app.route("/about", methods=["POST","GET"])
 def about():
-    return render_template("about.html")
-
-@app.route("/dashboard/<username>")
-def dashboard(username):
-    if username in session:
-        print "hi"
+    if 'username' in session:
+        loggedin = True
+        username = escape(session['username'])
+        return render_template("about.html", loggedin=loggedin,username=username)
     else:
-        print "you are not logged in"
-    return render_template("dashboard.html",username=username)
+        loggedin = False
+    return render_template("about.html", loggedin=loggedin)
+
+
+@app.route("/loggedin/", methods=["POST","GET"])
+def user():
+    #POST METHOD MEANS UPDATING PASSWORD
+    if request.method == 'POST' and 'username' in session:
+        newpwdinput = request.form.get("newpas")
+        newrepwdinput = request.form.get("newrepas")
+        print newpwdinput
+        print newrepwdinput
+        if newpwdinput == newrepwdinput: #matched successfully, update passwords
+            username = escape(session['username'])
+            MongoWork.update_password(username,newpwdinput)
+            flash("Password was successfully updated.")
+            return redirect(url_for("user"))
+        else:
+            flash("Passwords did not match. Password was not updated.")
+            return redirect(url_for("user"))
+    else: #GET METHOD
+        if 'username' in session:
+            username = escape(session['username'])
+            user_info = MongoWork.find_usrinfo(username)
+            fname = user_info['firstname']
+            lname = user_info['lastname']
+            u = user_info['uname']
+            pwd = user_info['password']
+            return render_template("user.html",username=username,fname=fname, lname=lname,u=u,pwd=pwd);
+        else: 
+            flash("You must log in to see that page.")
+            return redirect(url_for('index',redirect_user = True))
+    
+@app.route("/dashboard")
+def dashboard():
+    if 'username' in session:
+        username = escape(session['username'])
+        return render_template("dashboard.html",username=username)
+    else:
+        flash("You must log in to see that page.")
+        return redirect(url_for('index'))
 
 #must pop off session
 @app.route("/logout")
 def logout():
+    #remove username from session
+    session.pop('username', None)
     return redirect(url_for('index'))
         
+
 @app.route("/register", methods=["POST","GET"])
 def register():
     if request.method == "POST":
