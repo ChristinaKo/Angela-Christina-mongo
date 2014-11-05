@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request,redirect, session, url_for
-
+import MongoWork
 app = Flask(__name__)
 
 
@@ -10,14 +10,10 @@ def index():
     except NameError:
         reged=False
     return render_template("index.html",reged=reged)
+
 @app.route("/about", methods=["POST","GET"])
 def about():
     return render_template("about.html")
-
-#same as index page
-@app.route("/login", methods=["POST","GET"])
-def login():
-    return render_template("index.html")
 
 @app.route("/loggedin/<username>")
 def logged_in(username):
@@ -25,19 +21,27 @@ def logged_in(username):
     
 @app.route("/register", methods=["POST","GET"])
 def register():
-    #use a boolean later/redirect to home page?
     if request.method == "POST":
         usr = request.form['username']
         passw = request.form['passwd']
         repassw = request.form['repasswd']
         firstname = request.form['fname']
         lastname = request.form['lname']
-        if passw == repassw and usr!='' and passw!='' and firstname!='' and lastname!='':
+        if passw == repassw and usr!='' and passw!='' and firstname!='' and lastname!='':#checks if everything is filled out
             registered=True
-            retVals = ' %s , %s, %s, %s , %s ' % (usr, passw, repassw, firstname, lastname)
-            MONGO = "{ 'uname':%s } " % (usr)
-            return redirect("/") 
-        #print retVals
+            #retVals = ' %s , %s, %s, %s , %s ' % (usr, passw, repassw, firstname, lastname)
+            mongo_input = { 'uname':usr,
+                            'password':passw, 
+                            'firstname':firstname,
+                            'lastname':lastname } 
+            #print mongo_input
+            print MongoWork.check_user_in_db(usr)
+            if MongoWork.check_user_in_db(usr):#may change to flash
+                user_taken=True
+                return render_template("register.html",user_taken=user_taken, usr=usr)
+            else:
+                MongoWork.new_user(mongo_input) #put user into our mongodb
+                return redirect("/") 
         else: #aka passwd !=repassw
             reg_error = True
             #set boolean to true --> will trigger error banner which we will pass through render_template

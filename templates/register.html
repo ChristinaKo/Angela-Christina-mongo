@@ -32,7 +32,7 @@
 	<li><li>
         <li class="pure-menu-selected">MONGO DEMO</li>
         <li><a href="/about">About</a></li>
-	<li><a href="/login">Login</a></li>	
+	<li><a href="/">Login</a></li>	
 	<li class="pure-menu-selected"><a href="/register">Register</a></li>
       </ul>
     </div>
@@ -41,7 +41,9 @@
       <!-- jinja goes here / if statement for below/error -->
       
       {% if reg_error %}
-      Registrations has failed. Please try again. <br>
+      Passwords did not match! Please try again. <br>
+      {% elif user_taken %}
+      Sorry! Username "{{usr}}" is already taken. Please try again. <br>
       {% else %}
       Hello, new users! Please fill out this form for your new account:<br>
       {%endif%}
