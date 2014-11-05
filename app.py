@@ -11,10 +11,10 @@ def index():
         pwdinput = request.form['passwd']
         #print MongoWork.check_user_in_db(userinput)
         if MongoWork.check_user_in_db(userinput) != None:
-            if MongoWork.find_pword(userinput) == pwdinput:
-                 #session['username'] = request.form['user']
-                 return redirect(url_for('about'))
-            else:
+            if MongoWork.find_pword(userinput) == pwdinput: ##SUCCESSFULLY LOGGED IN
+                session['username'] = userinput
+                return redirect(url_for('dashboard',username=userinput))
+            else:#incorrect password error
                 error = True
                 return render_template("index.html" ,error=error)
         else:
@@ -30,9 +30,13 @@ def index():
 def about():
     return render_template("about.html")
 
-@app.route("/loggedin/<username>")
-def logged_in(username):
-    return render_template("loggedin.html",username=username)
+@app.route("/dashboard/<username>")
+def dashboard(username):
+    if username in session:
+        print "hi"
+    else:
+        print "you are not logged in"
+    return render_template("dashboard.html",username=username)
 
 #must pop off session
 @app.route("/logout")
